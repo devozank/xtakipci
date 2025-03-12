@@ -40,6 +40,7 @@
             font-size: 24px;
             color: #333;
             margin-bottom: 15px;
+            text-align: center;
         }
         .instructions {
             font-size: 16px;
@@ -55,10 +56,55 @@
             justify-content: flex-start;
             align-items: center;
         }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .upload-wrapper {
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            width: 100%;
+            transition: border-color 0.3s;
+            text-align: center;
+        }
+        .upload-wrapper:hover {
+            border-color: #007bff;
+        }
+        input[type="file"] {
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
         .upload-text {
             font-size: 16px;
             color: #666;
             pointer-events: none;
+        }
+        .file-name {
+            font-size: 14px;
+            color: #333;
+            margin-top: 5px;
+            display: none;
+        }
+        input[type="submit"] {
+            padding: 12px 24px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
         }
         #loading {
             display: none;
@@ -79,42 +125,32 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+            .upload-text, input[type="submit"] {
+                font-size: 14px;
+            }
+            .instructions {
+                font-size: 14px;
+            }
+        }
     </style>
     <script>
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
 
-            reader.onload = function(e) {
-                const content = e.target.result;
-                let prefix = '';
-                if (file.name.includes('follower')) {
-                    prefix = 'window.YTD.follower.part0 = ';
-                } else if (file.name.includes('following')) {
-                    prefix = 'window.YTD.following.part0 = ';
-                }
-
-                if (content.startsWith(prefix)) {
-                    const jsonData = JSON.parse(content.slice(prefix.length).trim());
-                    const accountIds = jsonData.map(entry => entry[Object.keys(entry)[0]].accountId);
-
-                    fetch('/process', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ fileType: file.name.includes('follower') ? 'follower' : 'following', accountIds }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Sunucudan yanıt:', data);
-                    });
-                } else {
-                    alert('Hatalı dosya formatı.');
-                }
-            };
-
-            reader.readAsText(file);
+        function updateFileName(event) {
+            const fileInput = event.target;
+            const fileNameElement = event.target.nextElementSibling; 
+            if (fileInput.files.length > 0) {
+                fileNameElement.textContent = 'Seçilen dosya: ' + fileInput.files[0].name;
+                fileNameElement.style.display = 'block';
+            } else {
+                fileNameElement.style.display = 'none';
+            }
         }
     </script>
 </head>
@@ -136,7 +172,23 @@
         
         <div class="container">
             <h1>2. Adım: Dosyalarınızı Yükleyin</h1>
-            <input type="file" accept=".js" onchange="handleFileSelect(event)">
+            <form action="/" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+                <div class="upload-wrapper">
+                    <input type="file" name="follower.js" accept=".js" required onchange="updateFileName(event)">
+                    <div class="upload-text">
+                        <i class="fas fa-cloud-upload-alt"></i> Follower Dosyası Seçmek için Tıklayın
+                    </div>
+                    <div class="file-name"></div>
+                </div>
+                <div class="upload-wrapper">
+                    <input type="file" name="following.js" accept=".js" required onchange="updateFileName(event)">
+                    <div class="upload-text">
+                        <i class="fas fa-cloud-upload-alt"></i> Following Dosyası Seçmek için Tıklayın
+                    </div>
+                    <div class="file-name"></div>
+                </div>
+                <input type="submit" value="Yükle">
+            </form>
             <div id="loading">
                 <div class="spinner"></div>
                 <span>Yükleniyor, lütfen bekleyiniz...</span>
