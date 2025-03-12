@@ -31,7 +31,7 @@
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             transition: transform 0.3s;
-            text-align: center;
+            text-align: left;
         }
         .container:hover {
             transform: scale(1.03);
@@ -51,7 +51,7 @@
             margin-right: 8px;
         }
         .instructions p {
-            margin: 12px 0;
+            margin: 20px 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -114,8 +114,8 @@
         }
         .spinner {
             margin-top: 10px;
-            border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid #007bff; /* Blue */
+            border: 4px solid #f3f3f3; /* Açık gri */
+            border-top: 4px solid #007bff; /* Mavi */
             border-radius: 50%;
             width: 30px;
             height: 30px;
@@ -157,15 +157,16 @@
 <body>
     <div class="main-wrapper">
         <div class="container">
-            <h1>1. Adım: Arşivi İstemeye Yönelik Rehber</h1>
+            <h1>1. Adım: Arşivi İsteme Rehberi</h1>
             <div class="instructions">
                 <p><i class="fas fa-user-circle"></i>Cihazınızda daha fazla simgesi görüntülenmiyorsa, sol üstteki profil simgesini bulun ve seçin.</p>
-                <p><i class="fas fa-cog"></i>Bir panel açıldığında, <strong>ayarlar ve gizlilik</strong> seçeneğini arayın ve tıklayın.</p>
-                <p><i class="fas fa-user"></i>Sol panelde başka bir menü görünecektir. İçinden geçin ve <strong>hesabınız</strong> üzerine dokunun.</p>
-                <p><i class="fas fa-archive"></i>Bir alt menü görünecektir. "<strong>Verilerinizin arşivini indirin</strong>" seçeneğini arayın ve Twitter'ın veri sayfasını yüklemek için tıklayın.</p>
+                <p><i class="fas fa-cog"></i>Bir panel açıldığında, "Ayalarlar ve gizlilik" seçeneğini arayın ve tıklayın.</p>
+                <p><i class="fas fa-user"></i>Sol panelde başka bir menü görünecektir, bu panelde "Hesabınız" seçeneğine dokunun.</p>
+                <p><i class="fas fa-archive"></i>Açılan alt menüde "Verilerinizin arşivini indirin" seçeneğini bulun ve Twitter'ın veri sayfasını yüklemek için tıklayın.</p>
                 <p><i class="fas fa-shield-alt"></i>Güvenlik nedeniyle, devam etmeden önce kimliğinizi doğrulamanız gerekecektir.</p>
-                <p><i class="fas fa-database"></i>Sonrasında <strong>Twitter verileri</strong> seçeneği görüntülenir; "<strong>arşiv iste</strong>" yazan mavi bir kutu göreceksiniz. Twitter arşivinizi talep etmek için üzerine tıklayın.</p>
-                <p><i class="fas fa-download"></i>Talebiniz hazır olduğunda indirin ve <strong>.zip</strong> dosyasını açarak <strong>"data"</strong> klasörüne gidin.</p>
+                <p><i class="fas fa-folder"></i>Sonrasında "Twitter verileri" seçeneği görüntülenecek. Burada "Arşiv iste" butonuna tıklayarak arşiv talep edebilirsiniz (Bu işlem 12-24 saat sürebilir).</p>
+                <p><i class="fas fa-download"></i>Arşiv hazır olduğunda indirin ve .zip dosyasını açarak "data" klasörüne gidin.</p>
+                <p><i class="fas fa-file-alt"></i>"follower.js" ve "following.js" dosyalarını seçin.</p>
             </div>
         </div>
         
