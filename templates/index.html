@@ -34,11 +34,20 @@
             font-size: 28px;
             color: #333;
         }
-        p.instructions {
+        .instructions {
             text-align: left;
             font-size: 16px;
             color: #555;
             margin-bottom: 20px;
+        }
+        .instructions i {
+            color: #007bff;
+            margin-right: 8px;
+        }
+        .instructions p {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
         }
         form {
             display: flex;
@@ -116,7 +125,7 @@
             .upload-text, input[type="submit"] {
                 font-size: 14px;
             }
-            p.instructions {
+            .instructions {
                 font-size: 14px;
             }
         }
@@ -141,17 +150,15 @@
 <body>
     <div class="container">
         <h1>Arşivinizi Yükleyin</h1>
-        <p class="instructions">
-            Twitter arşivinizi hazırlamak için aşağıdaki adımları izleyin:
-            <ol>
-                <li>Twitter hesabınıza giriş yapın ve <a href="https://twitter.com/settings/your_twitter_data" target="_blank">Twitter veri ayarları</a> sayfasına gidin.</li>
-                <li>Arşivinizi talep edin, bu işlem biraz zaman alabilir.</li>
-                <li>Arşiv hazır olduğunda, size bir e-posta ile gelecek. Bu e-postadaki bağlantıya tıklayarak arşivi indirin.</li>
-                <li>İndirdiğiniz .zip dosyasını açın, ve "data" klasörüne gidin.</li>
-                <li>Bu klasörden "follower.js" ve "following.js" dosyalarını seçin.</li>
-            </ol>
-            Dosyaları seçtikten sonra aşağıdan yükleyebilirsiniz.
-        </p>
+        <div class="instructions">
+            <p><i class="fas fa-cog"></i><strong>Ayarlar ve gizlilik</strong> menüsünü açın.</p>
+            <p><i class="fas fa-tools"></i>Ayarlar menüsünden verilerinizi arşivleme sayfasına gidin.</p>
+            <p><i class="fas fa-file-archive"></i><strong>Arşiv talep et</strong> seçeneğine tıklayın.</p>
+            <p><i class="fas fa-download"></i>Vurgulanan <strong>İndir</strong> seçeneğine tıklayın.</p>
+            <p><i class="fas fa-file-zipper"></i>Twitter arşivinizi indirin.</p>
+            <p><i class="fas fa-folder-open"></i>İndirilen .zip dosyasını açın ve "data" klasörüne gidin.</p>
+            <p><i class="fas fa-file"></i>"follower.js" ve "following.js" dosyalarını seçin.</p>
+        </div>
         <form action="/" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
             <div class="upload-wrapper">
                 <input type="file" name="follower.js" accept=".js" required onchange="updateFileName(event)">
