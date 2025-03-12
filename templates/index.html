@@ -11,34 +11,41 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             background-color: #f0f2f5;
         }
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+        }
         .container {
-            max-width: 800px;
             width: 100%;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            text-align: center;
             transition: transform 0.3s;
+            text-align: center;
         }
         .container:hover {
             transform: scale(1.03);
         }
         h1 {
-            margin-bottom: 20px;
             font-size: 28px;
             color: #333;
+            margin-bottom: 15px;
         }
         .instructions {
             text-align: left;
             font-size: 16px;
             color: #555;
-            margin-bottom: 20px;
         }
         .instructions i {
             color: #007bff;
@@ -148,37 +155,43 @@
     </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Arşivinizi Yükleyin</h1>
-        <div class="instructions">
-            <p><i class="fas fa-cog"></i><strong>Ayarlar ve gizlilik</strong> menüsünü açın.</p>
-            <p><i class="fas fa-tools"></i>Ayarlar menüsünden verilerinizi arşivleme sayfasına gidin.</p>
-            <p><i class="fas fa-file-archive"></i><strong>Arşiv talep et</strong> seçeneğine tıklayın.</p>
-            <p><i class="fas fa-download"></i>Vurgulanan <strong>İndir</strong> seçeneğine tıklayın.</p>
-            <p><i class="fas fa-file-zipper"></i>Twitter arşivinizi indirin.</p>
-            <p><i class="fas fa-folder-open"></i>İndirilen .zip dosyasını açın ve "data" klasörüne gidin.</p>
-            <p><i class="fas fa-file"></i>"follower.js" ve "following.js" dosyalarını seçin.</p>
+    <div class="main-wrapper">
+        <div class="container">
+            <h1>1. Adım: Arşivi İstemeye Yönelik Rehber</h1>
+            <div class="instructions">
+                <p><i class="fas fa-cog"></i><strong>Ayarlar ve gizlilik</strong> menüsünü açın.</p>
+                <p><i class="fas fa-tools"></i>Ayarlar menüsünden verilerinizi arşivleme sayfasına gidin.</p>
+                <p><i class="fas fa-file-archive"></i><strong>Arşiv talep et</strong> seçeneğine tıklayın.</p>
+                <p><i class="fas fa-download"></i>Vurgulanan <strong>İndir</strong> seçeneğine tıklayın.</p>
+                <p><i class="fas fa-file-zipper"></i>Twitter arşivinizi indirin.</p>
+                <p><i class="fas fa-folder-open"></i>İndirilen .zip dosyasını açın ve "data" klasörüne gidin.</p>
+                <p><i class="fas fa-file"></i>"follower.js" ve "following.js" dosyalarını seçin.</p>
+            </div>
         </div>
-        <form action="/" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
-            <div class="upload-wrapper">
-                <input type="file" name="follower.js" accept=".js" required onchange="updateFileName(event)">
-                <div class="upload-text">
-                    <i class="fas fa-cloud-upload-alt"></i> Follower Dosyası Seçmek için Tıklayın
+        
+        <div class="container">
+            <h1>2. Adım: Dosyalarınızı Yükleyin</h1>
+            <form action="/" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+                <div class="upload-wrapper">
+                    <input type="file" name="follower.js" accept=".js" required onchange="updateFileName(event)">
+                    <div class="upload-text">
+                        <i class="fas fa-cloud-upload-alt"></i> Follower Dosyası Seçmek için Tıklayın
+                    </div>
+                    <div class="file-name"></div>
                 </div>
-                <div class="file-name"></div>
-            </div>
-            <div class="upload-wrapper">
-                <input type="file" name="following.js" accept=".js" required onchange="updateFileName(event)">
-                <div class="upload-text">
-                    <i class="fas fa-cloud-upload-alt"></i> Following Dosyası Seçmek için Tıklayın
+                <div class="upload-wrapper">
+                    <input type="file" name="following.js" accept=".js" required onchange="updateFileName(event)">
+                    <div class="upload-text">
+                        <i class="fas fa-cloud-upload-alt"></i> Following Dosyası Seçmek için Tıklayın
+                    </div>
+                    <div class="file-name"></div>
                 </div>
-                <div class="file-name"></div>
+                <input type="submit" value="Yükle">
+            </form>
+            <div id="loading">
+                <div class="spinner"></div>
+                <span>Yükleniyor, lütfen bekleyiniz...</span>
             </div>
-            <input type="submit" value="Yükle">
-        </form>
-        <div id="loading">
-            <div class="spinner"></div>
-            <span>Yükleniyor, lütfen bekleyiniz...</span>
         </div>
     </div>
 </body>
