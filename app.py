@@ -5,6 +5,8 @@ import json
 app = Flask(__name__)
 ALLOWED_FILES = {'follower.js', 'following.js'}
 
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
+
 def allowed_file(filename):
     return filename.lower() in ALLOWED_FILES
 
