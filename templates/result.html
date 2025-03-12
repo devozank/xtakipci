@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonuçlar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        h1, h2 {
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 20px;
+            color: #555;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            color: red;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        a.clicked {
+            color: green;
+        }
+        .checkmark {
+            display: none;
+            margin-left: 5px;
+            color: green;
+        }
+        a.clicked + .checkmark {
+            display: inline;
+        }
+        .back-link {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 480px) {
+            h1, h2 {
+                font-size: 20px;
+            }
+            .back-link {
+                font-size: 14px;
+            }
+        }
+    </style>
+    <script>
+        function init() {
+            const links = document.querySelectorAll('a.user-link');
+            const visitedLinks = JSON.parse(localStorage.getItem('visitedLinks') || '[]');
+            let totalLinks = links.length;
+            let clickedLinksCount = 0;
+
+            links.forEach(link => {
+                if (visitedLinks.includes(link.href)) {
+                    link.classList.add('clicked');
+                    const checkmark = link.nextElementSibling;
+                    if (checkmark) {
+                        checkmark.style.display = 'inline';
+                    }
+                    clickedLinksCount += 1;
+                }
+
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    this.classList.add('clicked');
+                    const checkmark = this.nextElementSibling;
+                    if (checkmark) {
+                        checkmark.style.display = 'inline';
+                    }
+                    visitedLinks.push(this.href);
+                    localStorage.setItem('visitedLinks', JSON.stringify([...new Set(visitedLinks)]));
+                    clickedLinksCount = visitedLinks.length;
+                    updateSummary(totalLinks, clickedLinksCount);
+                    window.open(this.href, '_blank');
+                });
+            });
+
+            updateSummary(totalLinks, clickedLinksCount);
+        }
+
+        function updateSummary(totalLinks, clickedLinksCount) {
+            const summaryElement = document.getElementById('summary');
+            const unclickedLinksCount = totalLinks - clickedLinksCount;
+            summaryElement.textContent = `Toplam link: ${totalLinks}, Tıklanan: ${clickedLinksCount}, Tıklanmayan: ${unclickedLinksCount}`;
+        }
+
+        window.onload = init;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Sizi Takip Etmeyen Kullanıcılar</h1>
+        <h2 id="summary">Toplam link: 0, Tıklanan: 0, Tıklanmayan: 0</h2>
+        <ul>
+        {% for link in links %}
+            <li>
+                <a href="{{ link }}" class="user-link" target="_blank">{{ link }}</a>
+                <span class="checkmark">✔️</span>
+            </li>
+        {% endfor %}
+        </ul>
+        <a href="/" class="back-link">Başka bir dosya yükle</a>
+    </div>
+</body>
+</html>
