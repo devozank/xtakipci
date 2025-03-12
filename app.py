@@ -1,59 +1,47 @@
 import os
 from flask import Flask, request, render_template
-from werkzeug.utils import secure_filename
-import zipfile
 import json
-from io import BytesIO
 
 app = Flask(__name__)
-ALLOWED_EXTENSIONS = {'zip'}
-REQUIRED_FILES = {'data/follower.js', 'data/following.js'}
+ALLOWED_FILES = {'follower.js', 'following.js'}
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return filename.lower() in ALLOWED_FILES
 
 @app.route('/', methods=['GET', 'POST'])
-def upload_file():
+def upload_files():
     if request.method == 'POST':
-        if 'file' not in request.files:
-            return "Dosya yüklenmedi"
+        if not all(k in request.files for k in ALLOWED_FILES):
+            return "Gerekli dosyalar yüklenmedi"
         
-        file = request.files['file']
-        if file.filename == '':
-            return "Dosya seçilmedi"
-        
-        if file and allowed_file(file.filename):
-            file_bytes = file.read()
-            links = process_zip_file(file_bytes)
-            return render_template('result.html', links=links)
-    
-    return render_template('index.html')
+        follower_file = request.files.get('follower.js')
+        following_file = request.files.get('following.js')
 
-def process_zip_file(file_bytes):
-    links = []
-    with zipfile.ZipFile(BytesIO(file_bytes), 'r') as zip_ref:
-        for file_name in REQUIRED_FILES:
-            if file_name in zip_ref.namelist():
-                with zip_ref.open(file_name) as f:
-                    data = f.read().decode('utf-8')
-                    prefix = 'window.YTD.follower.part0 = ' if 'follower' in file_name else 'window.YTD.following.part0 = '
-                    json_data = load_json_data(data, prefix)
-                    if 'follower' in file_name:
-                        followers = {entry['follower']['accountId'] for entry in json_data}
-                    else:
-                        following = {entry['following']['accountId'] for entry in json_data}
+        if not follower_file or not allowed_file(follower_file.filename):
+            return "Uygun bir follower dosyası seçilmedi"
+        
+        if not following_file or not allowed_file(following_file.filename):
+            return "Uygun bir following dosyası seçilmedi"
+
+        followers = process_data_file(follower_file, prefix='window.YTD.follower.part0 = ')
+        following = process_data_file(following_file, prefix='window.YTD.following.part0 = ')
 
         not_following_back = following - followers
         base_url = "https://twitter.com/intent/user?user_id="
         links = [f"{base_url}{account_id}" for account_id in not_following_back]
 
-    return links
+        return render_template('result.html', links=links)
+    
+    return render_template('index.html')
 
-def load_json_data(data, prefix_to_remove):
-    data = data.strip()
-    if data.startswith(prefix_to_remove):
-        data = data[len(prefix_to_remove):].strip()
-    return json.loads(data)
+def process_data_file(file, prefix):
+    data = file.read().decode('utf-8').strip()
+    if data.startswith(prefix):
+        data = data[len(prefix):].strip()
+    
+    json_data = json.loads(data)
+    key = 'follower' if 'follower' in file.filename else 'following'
+    return {entry[key]['accountId'] for entry in json_data}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))

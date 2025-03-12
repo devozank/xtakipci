@@ -119,7 +119,7 @@
 
         function updateFileName(event) {
             const fileInput = event.target;
-            const fileNameElement = document.querySelector('.file-name');
+            const fileNameElement = event.target.nextElementSibling; 
             if (fileInput.files.length > 0) {
                 fileNameElement.textContent = 'Seçilen dosya: ' + fileInput.files[0].name;
                 fileNameElement.style.display = 'block';
@@ -134,9 +134,16 @@
         <h1>Arşivinizi Yükleyin</h1>
         <form action="/" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
             <div class="upload-wrapper">
-                <input type="file" name="file" accept=".zip" required onchange="updateFileName(event)">
+                <input type="file" name="follower.js" accept=".js" required onchange="updateFileName(event)">
                 <div class="upload-text">
-                    <i class="fas fa-cloud-upload-alt"></i> Dosya Seçmek için Tıklayın
+                    <i class="fas fa-cloud-upload-alt"></i> Follower Dosyası Seçmek için Tıklayın
+                </div>
+                <div class="file-name"></div>
+            </div>
+            <div class="upload-wrapper">
+                <input type="file" name="following.js" accept=".js" required onchange="updateFileName(event)">
+                <div class="upload-text">
+                    <i class="fas fa-cloud-upload-alt"></i> Following Dosyası Seçmek için Tıklayın
                 </div>
                 <div class="file-name"></div>
             </div>
